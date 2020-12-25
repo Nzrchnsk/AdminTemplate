@@ -35,13 +35,18 @@ namespace WebApi
             services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseNpgsql(connectionString: Configuration.GetConnectionString("IdentityConnection")
                 ));
+            
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
+            
             services.AddTransient<Migrator>();
             services.AddTransient<JwtTokenHelper>(services => new JwtTokenHelper(
                 issuer: Startup.Configuration[StartupKeys.JWT_ISSUER],
                 audience: Startup.Configuration[StartupKeys.JWT_AUDIENCE],
                 secureKey: Startup.Configuration[StartupKeys.JWT_SECURE_KEY],
                 lifeTime: Startup.Configuration[StartupKeys.JWT_LIFE_TIME_KEY],
-                userManager: services.GetRequiredService<UserManager<ApplicationUser>>()
+                userManager: services.GetService<UserManager<ApplicationUser>>()
             ));
             services.AddTransient<IAuthService, AuthService>();
 
