@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Services.AuthService;
+using Newtonsoft.Json.Linq;
 using SharedDto;
+using Swashbuckle.AspNetCore.Annotations;
 using WebApi.Constants;
 
 namespace WebApi.Controllers
@@ -35,6 +37,7 @@ namespace WebApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
+        [Produces( typeof(AuthModel) )]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponseModel<JwtTokenModel>))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(ResponseModel<NoContentResponse>))]
         public async Task<IActionResult> Login([FromBody] AuthModel authModel)
@@ -43,7 +46,7 @@ namespace WebApi.Controllers
             return authResult.Status switch
             {
                 (int)Core.Constants.ActionStatuses.Fail => Unauthorized(new ResponseModel<NoContentResponse>(authResult.Result.Message, null)),
-                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>(authResult.Result.Message, authResult.Result))
+                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", authResult.Result))
             };
         }
         
@@ -56,13 +59,14 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("refresh")]
         [AllowAnonymous]
+        [Produces( typeof(JwtTokenModel) )]
         public async Task<IActionResult> RefreshTokens([FromBody]JwtTokenModel authToken)
         {
             var refreshResult = await _authService.Refresh(authToken);
             return refreshResult.Status switch
             {
                 (int)Core.Constants.ActionStatuses.Fail => Unauthorized(new ResponseModel<NoContentResponse>(refreshResult.Result.Message, null)),
-                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>(refreshResult.Result.Message, refreshResult.Result))
+                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", refreshResult.Result))
             };
             
         }
