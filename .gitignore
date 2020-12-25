@@ -9,5 +9,9 @@ riderModule.iml
 
 
 src/Core/bin/
-src/Core/bin/*
 src/Core/obj/
+
+
+src/WebApi/bin/
+src/WebApi/obj/
+src/WebApi/appsettings.Development.json

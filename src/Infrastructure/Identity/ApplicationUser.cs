@@ -16,6 +16,13 @@ namespace Infrastructure.Identity
         {
             Email = email;
             Name = name;
+            UserName = email;
+        }
+        
+        public ApplicationUser(string email) : base()
+        {
+            Email = email;
+            UserName = email;
         }
   
         public string Name { get; private set; }
