@@ -11,7 +11,7 @@ namespace Core.Services.AuthService
             Login = login;
             Password = password;
         }
-        public string Login { get; private set; }
-        public string Password { get; private set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
     }
 }

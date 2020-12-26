@@ -12,17 +12,8 @@ namespace Core.Services.AuthService
             AccessToken = accessToken;
             RefreshToken = refreshToken;
         }
-        public string AccessToken { get; private set; }
-        public string RefreshToken { get; private set; }
-
-        public void SetAccessToken(string accessToken)
-        {
-            AccessToken = accessToken;
-        }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         
-        public void SetRefreshToken(string refreshToken)
-        {
-            RefreshToken = refreshToken;
-        }
     }
 }

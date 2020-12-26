@@ -46,7 +46,8 @@ namespace WebApi.Controllers
             return authResult.Status switch
             {
                 (int)Core.Constants.ActionStatuses.Fail => Unauthorized(new ResponseModel<NoContentResponse>(authResult.Result.Message, null)),
-                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", authResult.Result))
+                // (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", authResult.Result))
+                (int)Core.Constants.ActionStatuses.Success => Ok(authResult.Result)
             };
         }
         
@@ -59,14 +60,14 @@ namespace WebApi.Controllers
         [HttpPost]
         [Route("refresh")]
         [AllowAnonymous]
-        [Produces( typeof(JwtTokenModel) )]
         public async Task<IActionResult> RefreshTokens([FromBody]JwtTokenModel authToken)
         {
             var refreshResult = await _authService.Refresh(authToken);
             return refreshResult.Status switch
             {
                 (int)Core.Constants.ActionStatuses.Fail => Unauthorized(new ResponseModel<NoContentResponse>(refreshResult.Result.Message, null)),
-                (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", refreshResult.Result))
+                // (int)Core.Constants.ActionStatuses.Success => Ok(new ResponseModel<AuthResult>("", refreshResult.Result))
+                (int)Core.Constants.ActionStatuses.Success => Ok(refreshResult.Result)
             };
             
         }
